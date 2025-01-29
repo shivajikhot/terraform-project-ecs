@@ -13,10 +13,12 @@ variable "private_subnet_cidr" {
   type        = string
 }
 
-variable "availability_zone" {
-  description = "AWS Availability Zone"
-  type        = string
+variable "availability_zones" {
+  description = "List of availability zones to use for subnets"
+  type        = list(string)
+  default     = ["us-west-1b", "us-west-1c"]  # Update with the zones you want to use
 }
+
 
 variable "execution_role_policy_arn" {
   description = "IAM policy ARN for ECS execution role"
