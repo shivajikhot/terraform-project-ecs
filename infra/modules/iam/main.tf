@@ -26,6 +26,12 @@ resource "aws_iam_role" "ecs_task_role" {
   })
 }
 
+resource "aws_iam_role_policy_attachment" "ecs_execution_role" {
+  role       = aws_iam_role.ecs_execution_role.name
+  policy_arn = var.execution_role_policy_arn
+}
+
+
 # Security Group for ALB
 resource "aws_security_group" "alb_security_group" {
   name        = "${var.environment}-alb-sg"
