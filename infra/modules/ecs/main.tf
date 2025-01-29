@@ -4,8 +4,8 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 resource "aws_ecs_task_definition" "task_definition" {
   family                = "${var.environment}-task"
-  execution_role_arn    = aws_iam_role.ecs_execution_role.arn
-  task_role_arn         = aws_iam_role.ecs_task_role.arn
+  execution_role_arn    = var.execution_role.arn
+  task_role_arn         = var.task_role.arn
   network_mode          = "awsvpc"
   container_definitions = jsonencode([
     {
