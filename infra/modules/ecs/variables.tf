@@ -15,3 +15,5 @@ variable "environment" {
 }
 variable "execution_role_arn" {}
 variable "task_role_arn" {}
+variable "ecr_patient_repo_url" {}
+variable "ecr_appointment_repo_url" {}
