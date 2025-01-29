@@ -22,13 +22,13 @@ module "ecs" {
 module "iam" {
   source                      = "../../modules/iam"
   execution_role_policy_arn   = var.execution_role_policy_arn
-  environment                 = var.environment"
+  environment                 = var.environment
 }
 
 module "ecr" {
   source      = "../../modules/ecr"
   repository_name = "my-ecr-repo-${var.environment}"
-  environment = "development"
+  environment = var.environment
 }
 
 module "alb" {
