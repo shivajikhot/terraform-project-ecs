@@ -27,9 +27,8 @@ jobs:
 
     - name: Build Docker image for patient service
       run: |
-        pwd
-        ls -a
-        docker build -t patient-service:latest .app/patient-service/Dockerfile 
+        ls
+        docker build -t patient-service:latest ./app/patient-service/
         docker tag patient-service:latest 575108922676.dkr.ecr.us-west-1.amazonaws.com/patient-service-repo:latest
 
     - name: Push Docker image to ECR
