@@ -34,3 +34,7 @@ variable "repository_name" {
   description = "ECR repository name"
   type        = string
 }
+
+variable "execution_role_arn" {}
+variable "task_role_arn" {}
+
