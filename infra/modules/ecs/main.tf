@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   container_definitions = jsonencode([
     {
       name      = "patient-service"
-      image     = "${module.ecr.patient_service_repo_url}:latest"  # Dynamically use the ECR URL
+      image     = "${var.ecr_patient_repo_url}:latest"  # Dynamically use the ECR URL
       cpu       = 512
       memory    = 1024
       essential = true
@@ -21,7 +21,7 @@ resource "aws_ecs_task_definition" "task_definition" {
     },
     {
       name      = "appointment-service"
-      image     = "${module.ecr.appointment_service_repo_url}:latest"  # Dynamically use the ECR URL
+      image     = "${var.ecr_appointment_repo_url}:latest"  # Dynamically use the ECR URL
       cpu       = 512
       memory    = 1024
       essential = true
