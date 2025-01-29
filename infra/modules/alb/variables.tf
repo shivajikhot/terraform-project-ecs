@@ -5,7 +5,7 @@ variable "alb_security_group_id" {
 
 variable "public_subnet_ids" {
   description = "Public subnet ID for the ALB"
-  type = string
+  type = list(string)
 }
 
 variable "vpc_id" {
