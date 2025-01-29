@@ -5,5 +5,4 @@ public_subnet_cidr  = "10.2.1.0/24"
 private_subnet_cidr = "10.2.2.0/24"
 availability_zone   = "us-west-1a"
 execution_role_policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-#patient_service_image = "<development-patient-image-url>"
-#appointment_service_image = "<development-appointment-image-url>"
+
