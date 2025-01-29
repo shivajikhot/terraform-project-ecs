@@ -23,15 +23,7 @@ variable "execution_role_policy_arn" {
   type        = string
 }
 
-variable "patient_service_image" {
-  description = "ECR image URL for the patient service"
-  type        = string
-}
 
-variable "appointment_service_image" {
-  description = "ECR image URL for the appointment service"
-  type        = string
-}
 variable "environment" {
   description = "Environment name (e.g., dev, staging, prod)"
   type = string
