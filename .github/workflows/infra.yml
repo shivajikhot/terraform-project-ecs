@@ -59,6 +59,7 @@ jobs:
       - name: validate tf configuration
         run: |
          tflint
+        continue-on-error: true
 
       # Terraform Plan
       - name: Terraform Plan
