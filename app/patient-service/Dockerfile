@@ -3,9 +3,9 @@ FROM node:16-slim
 
 # Set the working directory inside the container
 WORKDIR /app
-
+RUN pwd
 # Copy the patient service file into the container
-COPY ./patient-service.js .
+COPY patient-service.js .
 
 # Expose the port that your service will run on
 EXPOSE 80
