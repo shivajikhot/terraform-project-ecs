@@ -22,6 +22,7 @@ module "ecs" {
 module "iam" {
   source                      = "../../modules/iam"
   execution_role_policy_arn   = var.execution_role_policy_arn
+  vpc_id                      = module.vpc.vpc_id
   environment                 = var.environment
 }
 
