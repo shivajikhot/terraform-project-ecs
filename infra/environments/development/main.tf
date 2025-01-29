@@ -15,8 +15,10 @@ module "ecs" {
   public_subnet_id        = module.vpc.public_subnet_ids
   ecs_security_group_id   = module.iam.ecs_security_group_id
   environment             = var.environment
-  execution_role_arn = module.iam.ecs_execution_role_arn
-  task_role_arn      = module.iam.ecs_task_role_arn
+  execution_role_arn      = module.iam.ecs_execution_role_arn
+  task_role_arn           = module.iam.ecs_task_role_arn
+  ecr_patient_repo_url    = module.ecr.patient_service_repo_url
+  ecr_appointment_repo_url = module.ecr.appointment_service_repo_url
 
 }
 
