@@ -3,7 +3,7 @@ variable "alb_security_group_id" {
   type = string
 }
 
-variable "public_subnet_id" {
+variable "public_subnet_ids" {
   description = "Public subnet ID for the ALB"
   type = string
 }
