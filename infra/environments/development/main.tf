@@ -12,7 +12,7 @@ module "vpc" {
 }
 module "ecs" {
   source                  = "../../modules/ecs"
-  public_subnet_id        = module.vpc.public_subnet_id
+  public_subnet_id        = module.vpc.public_subnet_ids
   ecs_security_group_id   = module.iam.ecs_security_group_id
   environment             = var.environment
 }
