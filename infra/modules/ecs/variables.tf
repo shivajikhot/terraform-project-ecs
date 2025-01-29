@@ -1,7 +1,7 @@
 
 variable "public_subnet_id" {
   description = "The public subnet ID"
-  type = string
+  type = list(string)
 }
 
 variable "ecs_security_group_id" {
