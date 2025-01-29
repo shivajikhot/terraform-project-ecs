@@ -3,7 +3,7 @@ resource "aws_lb" "application_load_balancer" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.security_group_id]
-  subnets            = slice(module.vpc.public_subnet_ids, 0, 2)  # Use the first two subnets
+  subnets            = subnets = slice(var.public_subnet_ids, 0, 2)
   enable_deletion_protection = false
 
   tags = {
