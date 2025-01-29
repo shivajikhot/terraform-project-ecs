@@ -36,3 +36,7 @@ variable "environment" {
   description = "Environment name (e.g., dev, staging, prod)"
   type = string
 }
+variable "repository_name" {
+  description = "ECR repository name"
+  type        = string
+}
