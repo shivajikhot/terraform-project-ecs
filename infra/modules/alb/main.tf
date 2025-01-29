@@ -1,11 +1,16 @@
-resource "aws_lb" "alb" {
+resource "aws_lb" "application_load_balancer" {
   name               = "${var.environment}-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [var.alb_security_group_id]
-  subnets            = [var.public_subnet_id]
+  security_groups    = [var.security_group_id]
+  subnets            = slice(module.vpc.public_subnet_ids, 0, 2)  # Use the first two subnets
   enable_deletion_protection = false
+
+  tags = {
+    Name = "${var.environment}-alb"
+  }
 }
+
 
 resource "aws_lb_target_group" "target_group" {
   name     = "${var.environment}-target-group"
