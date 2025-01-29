@@ -10,14 +10,12 @@ module "vpc" {
   availability_zones   = var.availability_zones
   environment         = var.environment
 }
-#module "ecs" {
-#  source                  = "../../modules/ecs"
-#  patient_service_image   = var.patient_service_image
-#  appointment_service_image = var.appointment_service_image
-#  public_subnet_id        = module.vpc.public_subnet_id
-#  ecs_security_group_id   = module.iam.ecs_security_group_id
-#  environment             = var.environment
-#}
+module "ecs" {
+  source                  = "../../modules/ecs"
+  public_subnet_id        = module.vpc.public_subnet_id
+  ecs_security_group_id   = module.iam.ecs_security_group_id
+  environment             = var.environment
+}
 
 module "iam" {
   source                      = "../../modules/iam"
