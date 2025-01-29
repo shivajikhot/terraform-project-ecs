@@ -7,21 +7,34 @@ resource "aws_ecs_task_definition" "task_definition" {
   execution_role_arn    = aws_iam_role.ecs_execution_role.arn
   task_role_arn         = aws_iam_role.ecs_task_role.arn
   network_mode          = "awsvpc"
-  container_definitions = jsonencode([{
-    name      = "patient-service"
-    image     = var.patient_service_image
-    cpu       = 512
-    memory    = 1024
-    essential = true
-    portMappings = [{
-      containerPort = 80
-      hostPort      = 80
-    }]
-  }])
+  container_definitions = jsonencode([
+    {
+      name      = "patient-service"
+      image     = "${module.ecr.patient_service_repo_url}:latest"  # Dynamically use the ECR URL
+      cpu       = 512
+      memory    = 1024
+      essential = true
+      portMappings = [{
+        containerPort = 80
+        hostPort      = 80
+      }]
+    },
+    {
+      name      = "appointment-service"
+      image     = "${module.ecr.appointment_service_repo_url}:latest"  # Dynamically use the ECR URL
+      cpu       = 512
+      memory    = 1024
+      essential = true
+      portMappings = [{
+        containerPort = 80
+        hostPort      = 80
+      }]
+    }
+  ])
 
   requires_compatibilities = ["FARGATE"]
-  memory                  = "1GB"
-  cpu                     = "0.5 vCPU"
+  memory                  = "2GB"
+  cpu                     = "1 vCPU"
 }
 
 resource "aws_ecs_service" "ecs_service" {
