@@ -17,3 +17,7 @@ variable "environment" {
   description = "Environment name (e.g., dev, staging, prod)"
   type = string
 }
+variable "appointment_service_image" {
+  description = "The Docker image URL for the appointment service"
+  type        = string
+}
