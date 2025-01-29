@@ -3,7 +3,7 @@ resource "aws_lb" "application_load_balancer" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.security_group_id]
-  subnets            = var.public_subnet  # Use the first two subnets
+  subnets            = slice(module.vpc.public_subnet_ids, 0, 2)  # Use the first two subnets
   enable_deletion_protection = false
 
   tags = {
@@ -11,23 +11,24 @@ resource "aws_lb" "application_load_balancer" {
   }
 }
 
-
 resource "aws_lb_target_group" "target_group" {
   name     = "${var.environment}-target-group"
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
+  target_type = "ip"  # Required for Fargate
+  protocol_version = "HTTP1"
 }
 
 resource "aws_lb_listener" "listener" {
-  load_balancer_arn = aws_lb.alb.arn
+  load_balancer_arn = aws_lb.application_load_balancer.arn  # FIXED REFERENCE
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
-    type             = "fixed-response"
+    type = "fixed-response"
     fixed_response {
-      status_code = 200
+      status_code  = 200
       content_type = "text/plain"
       message_body = "OK"
     }
