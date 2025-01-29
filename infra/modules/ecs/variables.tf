@@ -13,3 +13,5 @@ variable "environment" {
   description = "Environment name (e.g., dev, staging, prod)"
   type = string
 }
+variable "execution_role_arn" {}
+variable "task_role_arn" {}
