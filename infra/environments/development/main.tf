@@ -35,7 +35,7 @@ module "ecr" {
 module "alb" {
   source                = "../../modules/alb"
   alb_security_group_id     = module.iam.alb_security_group_id
-  public_subnet_id      = slice(module.vpc.public_subnet_ids, 0, 2)
+  public_subnet_id      = module.vpc.public_subnet_ids
   vpc_id                = module.vpc.vpc_id
   environment           = var.environment
 }
