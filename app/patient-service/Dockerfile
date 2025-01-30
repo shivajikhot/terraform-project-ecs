@@ -8,7 +8,7 @@ RUN npm install express
 COPY patient-service.js .
 
 # Expose the port that your service will run on
-EXPOSE 80
+EXPOSE 3000
 
 # Run the patient service when the container starts
 CMD ["node", "patient-service.js"]
