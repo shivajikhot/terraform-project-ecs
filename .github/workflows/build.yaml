@@ -27,17 +27,17 @@ jobs:
       run: |
         ls
         docker build -t patient-service:latest ./app/patient-service/
-        docker tag patient-service:latest 575108922676.dkr.ecr.us-west-1.amazonaws.com/development-env-patient-service-repo:latest
+        docker tag patient-service:latest 575108922676.dkr.ecr.us-west-1.amazonaws.com/development-patient-service-repo:latest
 
     - name: Push Docker image to ECR
       run: |
-        docker push 575108922676.dkr.ecr.us-west-1.amazonaws.com/development-env-patient-service-repo:latest
+        docker push 575108922676.dkr.ecr.us-west-1.amazonaws.com/development-patient-service-repo:latest
 
     - name: Build Docker image for appointment service
       run: |
         docker build -t appointment-service:latest ./app/appointment-service/ 
-        docker tag appointment-service:latest 575108922676.dkr.ecr.us-west-1.amazonaws.com/development-env-appointment-service-repo:latest
+        docker tag appointment-service:latest 575108922676.dkr.ecr.us-west-1.amazonaws.com/development-appointment-service-repo:latest
 
     - name: Push Docker image to ECR
       run: |
-        docker push 575108922676.dkr.ecr.us-west-1.amazonaws.com/development-env-appointment-service-repo:latest
+        docker push 575108922676.dkr.ecr.us-west-1.amazonaws.com/development-appointment-service-repo:latest
