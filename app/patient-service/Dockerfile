@@ -3,7 +3,7 @@ FROM node:16-slim
 
 # Set the working directory inside the container
 WORKDIR /app
-RUN pwd
+RUN npm install express
 # Copy the patient service file into the container
 COPY patient-service.js .
 
