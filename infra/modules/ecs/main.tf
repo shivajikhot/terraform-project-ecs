@@ -48,4 +48,16 @@ resource "aws_ecs_service" "ecs_service" {
     security_groups  = [var.ecs_security_group_id]
     assign_public_ip = true
   }
+
+  load_balancer {
+    target_group_arn = var.patient_tg_arn  # Use the correct target group for the service
+    container_name   = "patient-service"
+    container_port   = 3000  # Port exposed by the container
+  }
+
+  load_balancer {
+    target_group_arn = var.appointment_tg_arn # Use the correct target group for the service
+    container_name   = "appointment-service"
+    container_port   = 3001  # Port exposed by the container
+  }
 }
