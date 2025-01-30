@@ -1,4 +1,4 @@
-name: destoy terraform infra
+name: Destoy terraform infra
 
 on:
  workflow_dispatch:
