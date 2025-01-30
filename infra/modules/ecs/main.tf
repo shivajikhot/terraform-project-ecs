@@ -37,12 +37,13 @@ resource "aws_ecs_task_definition" "task_definition" {
   cpu                     = "1 vCPU"
 }
 
-resource "aws_ecs_service" "ecs_service" {
+resource "aws_ecs_service" "patient_service" {
   name            = "patient-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.task_definition.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+
   network_configuration {
     subnets          = var.public_subnet_ids
     security_groups  = [var.ecs_security_group_id]
@@ -50,14 +51,28 @@ resource "aws_ecs_service" "ecs_service" {
   }
 
   load_balancer {
-    target_group_arn = var.patient_tg_arn  # Use the correct target group for the service
+    target_group_arn = var.patient_tg_arn
     container_name   = "patient-service"
-    container_port   = 3000  # Port exposed by the container
+    container_port   = 3000
+  }
+}
+
+resource "aws_ecs_service" "appointment_service" {
+  name            = "appointment-service"
+  cluster         = aws_ecs_cluster.ecs_cluster.id
+  task_definition = aws_ecs_task_definition.task_definition.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = var.public_subnet_ids
+    security_groups  = [var.ecs_security_group_id]
+    assign_public_ip = true
   }
 
   load_balancer {
-    target_group_arn = var.appointment_tg_arn # Use the correct target group for the service
+    target_group_arn = var.appointment_tg_arn
     container_name   = "appointment-service"
-    container_port   = 3001  # Port exposed by the container
+    container_port   = 3001
   }
 }
