@@ -8,7 +8,7 @@ RUN npm install express
 COPY appointment-service.js .
 
 # Expose the port that your service will run on
-EXPOSE 90
+EXPOSE 3001
 
 # Run the appointment service when the container starts
 CMD ["node", "appointment-service.js"]
