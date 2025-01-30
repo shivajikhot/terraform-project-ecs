@@ -15,8 +15,8 @@ resource "aws_ecs_task_definition" "task_definition" {
       memory    = 1024
       essential = true
       portMappings = [{
-        containerPort = 80
-        hostPort      = 80
+        containerPort = 3000
+        hostPort      = 3000
       }]
     },
     {
@@ -26,8 +26,8 @@ resource "aws_ecs_task_definition" "task_definition" {
       memory    = 1024
       essential = true
       portMappings = [{
-        containerPort = 90
-        hostPort      = 90
+        containerPort = 3001
+        hostPort      = 3001
       }]
     }
   ])
