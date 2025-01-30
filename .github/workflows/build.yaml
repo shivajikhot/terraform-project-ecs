@@ -31,7 +31,7 @@ jobs:
 
     - name: Push Docker image to ECR
       run: |
-        docker push 575108922676.dkr.ecr.us-west-1.amazonaws.com/patient-service-repo:latest
+        docker push 575108922676.dkr.ecr.us-west-1.amazonaws.com/development-env-patient-service-repo:latest
 
     - name: Build Docker image for appointment service
       run: |
@@ -40,4 +40,4 @@ jobs:
 
     - name: Push Docker image to ECR
       run: |
-        docker push 575108922676.dkr.ecr.us-west-1.amazonaws.com/appointment-service-repo:latest
+        docker push 575108922676.dkr.ecr.us-west-1.amazonaws.com/development-env-appointment-service-repo:latest
