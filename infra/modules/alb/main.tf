@@ -17,7 +17,17 @@ resource "aws_lb_target_group" "patient_tg" {
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   target_type = "ip"
+  health_check {
+    path                = "/health"      # Define the health check path
+    protocol            = "HTTP"
+    interval            = 30              # Health check interval (seconds)
+    timeout             = 5               # Timeout for health check (seconds)
+    healthy_threshold   = 3               # Consecutive healthy checks before considering healthy
+    unhealthy_threshold = 3               # Consecutive unhealthy checks before considering unhealthy
+    matcher             = "200"           # Health check response code (can be a specific code or range)
+  }
 }
+
 
 resource "aws_lb_target_group" "appointment_tg" {
   name     = "appointment-tg"
@@ -25,6 +35,15 @@ resource "aws_lb_target_group" "appointment_tg" {
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   target_type = "ip"
+  health_check {
+    path                = "/health"      
+    protocol            = "HTTP"
+    interval            = 30             
+    timeout             = 5               
+    healthy_threshold   = 3               
+    unhealthy_threshold = 3           
+    matcher             = "200"          
+  }
 }
 
 # Single ALB Listener on port 80
@@ -38,7 +57,7 @@ resource "aws_lb_listener" "http" {
     fixed_response {
       status_code  = 404
       content_type = "text/plain"
-      message_body = "Not Found"
+      message_body = "application not founf"
     }
   }
 }
