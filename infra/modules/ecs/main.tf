@@ -1,6 +1,21 @@
 resource "aws_ecs_cluster" "ecs_cluster" {
   name = "${var.environment}-ecs-cluster"
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
+
+resource "aws_cloudwatch_log_group" "ecs_patient_logs" {
+  name              = "/ecs/patient-service"
+  retention_in_days = 30
+}
+
+resource "aws_cloudwatch_log_group" "ecs_appointment_logs" {
+  name              = "/ecs/appointment-service"
+  retention_in_days = 30
+}
+
 
 resource "aws_ecs_task_definition" "task_definition" {
   family                = "${var.environment}-task"
@@ -18,6 +33,14 @@ resource "aws_ecs_task_definition" "task_definition" {
         containerPort = 3000
         hostPort      = 3000
       }]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/patient-service"
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     },
     {
       name      = "appointment-service"
@@ -29,6 +52,14 @@ resource "aws_ecs_task_definition" "task_definition" {
         containerPort = 3001
         hostPort      = 3001
       }]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/appointment-service"
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     }
   ])
 
