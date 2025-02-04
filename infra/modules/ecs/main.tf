@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "task_definition" {
         logDriver = "awslogs"
         options = {
           awslogs-group         = "/ecs/patient-service"
-          awslogs-region        = var.aws_region
+          awslogs-region        = us-west-1
           awslogs-stream-prefix = "ecs"
         }
       }
@@ -56,7 +56,7 @@ resource "aws_ecs_task_definition" "task_definition" {
         logDriver = "awslogs"
         options = {
           awslogs-group         = "/ecs/appointment-service"
-          awslogs-region        = var.aws_region
+          awslogs-region        = us-west-1
           awslogs-stream-prefix = "ecs"
         }
       }
