@@ -64,8 +64,8 @@ resource "aws_ecs_task_definition" "task_definition" {
   {
       name      = "xray-daemon"
       image     = "amazon/aws-xray-daemon"
-      cpu       = 256
-      memory    = 512
+      cpu       = 50
+      memory    = 128
       essential = true
       portMappings = [{ 
         containerPort = 2000
