@@ -16,6 +16,12 @@ resource "aws_cloudwatch_log_group" "ecs_appointment_logs" {
   retention_in_days = 30
 }
 
+resource "aws_cloudwatch_log_group" "xray_logs" {
+  name              = "/ecs/X-Ray"
+  retention_in_days = 30
+}
+
+
 
 resource "aws_ecs_task_definition" "task_definition" {
   family                = "${var.environment}-task"
@@ -70,6 +76,7 @@ resource "aws_ecs_task_definition" "task_definition" {
       portMappings = [{ 
         containerPort = 2000
         hostPort      = 2000
+        protocol      = "UDP"
        }]
       logConfiguration = {
         logDriver = "awslogs"
