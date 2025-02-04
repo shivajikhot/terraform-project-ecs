@@ -39,6 +39,12 @@ resource "aws_ecs_task_definition" "task_definition" {
         containerPort = 3000
         hostPort      = 3000
       }]
+      environment = [
+        {
+          name  = "AWS_REGION"
+          value = "us-west-1"  # Set your AWS region
+        }
+      ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
