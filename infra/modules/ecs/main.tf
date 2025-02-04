@@ -60,6 +60,17 @@ resource "aws_ecs_task_definition" "task_definition" {
           awslogs-stream-prefix = "ecs"
         }
       }
+    },
+  {
+      name      = "xray-daemon"
+      image     = "amazon/aws-xray-daemon"
+      cpu       = 256
+      memory    = 512
+      essential = true
+      portMappings = [{ 
+        containerPort = 2000
+        hostPort      = 2000
+       }]
     }
   ])
 
