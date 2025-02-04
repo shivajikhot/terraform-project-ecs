@@ -71,6 +71,14 @@ resource "aws_ecs_task_definition" "task_definition" {
         containerPort = 2000
         hostPort      = 2000
        }]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/X-Ray"
+          awslogs-region        = "us-west-1"
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     }
   ])
 
