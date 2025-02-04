@@ -32,6 +32,49 @@ resource "aws_iam_role_policy_attachment" "ecs_execution_role" {
 }
 
 
+#CW
+
+resource "aws_iam_policy" "ecs_logging_xray_policy" {
+  name        = "ecs_logging_xray_policy"
+  description = "Allows ECS tasks to send logs to CloudWatch and traces to X-Ray"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "arn:aws:logs:*:*:*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+ 
+
+resource "aws_iam_role_policy_attachment" "ecs_execution_attach_logging" {
+  role       = aws_iam_role.ecs_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+}
+ 
+resource "aws_iam_role_policy_attachment" "ecs_execution_attach_xray" {
+  role       = aws_iam_role.ecs_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess"
+}
+ 
+
+
+
+
 # Security Group for ALB
 resource "aws_security_group" "alb_security_group" {
   name        = "${var.environment}-alb-sg"
