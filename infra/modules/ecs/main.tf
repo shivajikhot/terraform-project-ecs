@@ -39,12 +39,6 @@ resource "aws_ecs_task_definition" "task_definition" {
         containerPort = 3000
         hostPort      = 3000
       }]
-      environment = [
-        {
-          name  = "AWS_REGION"
-          value = "us-west-1"  # Set your AWS region
-        }
-      ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -84,6 +78,24 @@ resource "aws_ecs_task_definition" "task_definition" {
         hostPort      = 2000
         protocol      = "UDP"
        }]
+      environment = [
+        {
+          name  = "AWS_REGION"
+          value = "us-west-1"  # Set your AWS region
+        },
+       {
+          name  = "AWS_XRAY_TRACING_NAME"
+          value = "appointment-service-trace"
+       },
+       {
+          name  = "AWS_XRAY_DAEMON_ADDRESS"
+          value = "xray.us-west-2.amazonaws.com:2000"
+        },
+       {
+        name  = "AWS_XRAY_DAEMON_DISABLE_METADATA"
+        value = "true"
+       }
+      ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
