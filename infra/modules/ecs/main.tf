@@ -94,7 +94,11 @@ resource "aws_ecs_task_definition" "task_definition" {
        {
         name  = "AWS_XRAY_DAEMON_DISABLE_METADATA"
         value = "true"
-       }
+       },
+      {
+       name  = "AWS_XRAY_DAEMON_NO_INSTANCE_ID"
+       value = "true"
+        }
       ]
       logConfiguration = {
         logDriver = "awslogs"
