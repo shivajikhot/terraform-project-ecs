@@ -6,11 +6,13 @@ on:
       - staging
       - production
       - development
+      - monitoring
   push:
     branches:
       - staging
       - production
       - development
+      - monitoring
 
 env:
   AWS_REGION: "us-west-1"
