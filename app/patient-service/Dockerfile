@@ -4,6 +4,7 @@ FROM node:16-slim
 # Set the working directory inside the container
 WORKDIR /app
 RUN npm install express
+RUN npm install aws-xray-sdk
 # Copy the patient service file into the container
 COPY patient-service.js .
 
