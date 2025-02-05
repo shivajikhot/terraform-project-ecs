@@ -1,4 +1,4 @@
-name: Terraform infra provision 
+name: Terraform infra provision
  
 on:
   pull_request:
