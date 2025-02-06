@@ -167,6 +167,9 @@ resource "aws_ecs_task_definition" "prometheus" {
   task_role_arn            = var.task_role_arn
   cpu                      = "512"
   memory                   = "1024"
+  volume {
+    name = "prometheus-config"
+  }
   container_definitions = jsonencode([{
     name      = "s3-sync"
     image     = "amazon/aws-cli"
