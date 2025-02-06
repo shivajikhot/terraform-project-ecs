@@ -190,7 +190,7 @@ resource "aws_ecs_task_definition" "prometheus" {
       }
       entryPoint = ["/bin/sh", "-c"]
       command = [
-        "aws s3 cp s3://${S3_BUCKET}/prometheus.yml ${PROMETHEUS_CONFIG_PATH} && /prometheus --config.file=${PROMETHEUS_CONFIG_PATH}"
+        "aws s3 cp s3://$S3_BUCKET/prometheus.yml $PROMETHEUS_CONFIG_PATH && /prometheus --config.file=$PROMETHEUS_CONFIG_PATH"
       ]
     }
   ])
@@ -237,6 +237,7 @@ resource "aws_ecs_service" "prometheus_service" {
   network_configuration {
     subnets          = var.public_subnet_ids
     security_groups  = [var.ecs_security_group_id]
+    assign_public_ip = true
   }
 }
 
@@ -250,6 +251,7 @@ resource "aws_ecs_service" "grafana_service" {
   network_configuration {
     subnets          = var.public_subnet_ids
     security_groups  = [var.ecs_security_group_id]
+    assign_public_ip = true
   }
 }
 
