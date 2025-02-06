@@ -155,3 +155,136 @@ resource "aws_ecs_service" "appointment_service" {
     container_port   = 3001
   }
 }
+
+
+##########MONITORING#####################################
+
+resource "aws_ecs_task_definition" "prometheus" {
+  family                   = "${var.environment}-prometheus"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  execution_role_arn       = var.execution_role_arn
+  task_role_arn            = var.task_role_arn
+  cpu                      = "512"
+  memory                   = "1024"
+
+  container_definitions = jsonencode([
+    {
+      name      = "prometheus"
+      image     = "prom/prometheus:latest"
+      cpu       = 256
+      memory    = 512
+      essential = true
+      portMappings = [{ containerPort = 9090 }]
+      environment = [
+        { name = "S3_BUCKET", value = aws_s3_bucket.prometheus_storage.bucket },
+        { name = "PROMETHEUS_CONFIG_PATH", value = "/etc/prometheus/prometheus.yml" }
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/prometheus"
+          awslogs-region        = "us-west-1"
+          awslogs-stream-prefix = "ecs"
+        }
+      }
+    }
+  ])
+}
+
+resource "aws_ecs_task_definition" "grafana" {
+  family                   = "${var.environment}-grafana"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  execution_role_arn       = var.execution_role_arn
+  task_role_arn            = var.task_role_arn
+  cpu                      = "512"
+  memory                   = "1024"
+
+  container_definitions = jsonencode([
+    {
+      name      = "grafana"
+      image     = "grafana/grafana:latest"
+      cpu       = 256
+      memory    = 512
+      essential = true
+      portMappings = [{ containerPort = 3000 }]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/grafana"
+          awslogs-region        = "us-west-1"
+          awslogs-stream-prefix = "ecs"
+        }
+      }
+    }
+  ])
+}
+
+
+resource "aws_ecs_service" "prometheus_service" {
+  name            = "prometheus-service"
+  cluster         = aws_ecs_cluster.ecs_cluster.id
+  task_definition = aws_ecs_task_definition.prometheus.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = var.public_subnet_ids
+    security_groups  = [var.ecs_security_group_id]
+  }
+}
+
+resource "aws_ecs_service" "grafana_service" {
+  name            = "grafana-service"
+  cluster         = aws_ecs_cluster.ecs_cluster.id
+  task_definition = aws_ecs_task_definition.grafana.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = var.public_subnet_ids
+    security_groups  = [var.ecs_security_group_id]
+  }
+}
+
+
+resource "aws_s3_bucket" "prometheus_bucket" {
+  bucket = "${var.environment}-prometheus-data"
+}
+
+resource "aws_s3_bucket_versioning" "prometheus_versioning" {
+  bucket = aws_s3_bucket.prometheus_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_iam_policy" "prometheus_s3_policy" {
+  name        = "${var.environment}-prometheus-s3-policy"
+  description = "Allows Prometheus to store data in S3"
+  
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          aws_s3_bucket.prometheus_bucket.arn,
+          "${aws_s3_bucket.prometheus_bucket.arn}/*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "prometheus_s3_attachment" {
+  role       = var.task_role_arn  # Attach to Prometheus task role
+  policy_arn = aws_iam_policy.prometheus_s3_policy.arn
+}
+
