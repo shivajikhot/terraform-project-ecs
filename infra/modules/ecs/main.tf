@@ -176,7 +176,7 @@ resource "aws_ecs_task_definition" "prometheus" {
     memory    = 128
     essential = true
     command = [
-      "aws", "s3", "cp", "s3://$S3_BUCKET/prometheus.yml", "/etc/prometheus/prometheus.yml"
+      "aws", "s3", "cp", "s3://${aws_s3_bucket.prometheus_bucket.bucket}/prometheus.yml", "/etc/prometheus/prometheus.yml"
     ]
   },
     {
