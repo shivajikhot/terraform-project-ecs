@@ -188,7 +188,6 @@ resource "aws_ecs_task_definition" "prometheus" {
       sourceVolume  = "prometheus-config"
       containerPath = "/etc/prometheus"
     }]
-    essential = true
   },
   {
     name      = "prometheus"
