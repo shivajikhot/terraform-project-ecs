@@ -205,15 +205,6 @@ resource "aws_ecs_task_definition" "prometheus" {
       containerPath = "/etc/prometheus"
     }]
   }])
-
-  volumes = [
-    {
-      name = "prometheus-config"
-      host = {
-        sourcePath = "/ecs/prometheus"
-      }
-    }
-  ]
 }
 
 
