@@ -167,39 +167,53 @@ resource "aws_ecs_task_definition" "prometheus" {
   task_role_arn            = var.task_role_arn
   cpu                      = "512"
   memory                   = "1024"
-
-  container_definitions = jsonencode([
- #  {
- #   name      = "aws-cli"
- #   image     = "amazon/aws-cli"
- #   cpu       = 128
- #   memory    = 128
- #   essential = true
- #   command = [
- #     "aws", "s3", "cp", "s3://${aws_s3_bucket.prometheus_bucket.bucket}/prometheus.yml", "/etc/prometheus/prometheus.yml"
- #   ]
- # },
-    {
-      name      = "prometheus"
-      image     = "prom/prometheus:latest"
-      cpu       = 256
-      memory    = 512
-      essential = true
-      portMappings = [{ containerPort = 9090 }]
-      environment = [
-        { name = "S3_BUCKET", value = aws_s3_bucket.prometheus_bucket.bucket },
-        { name = "PROMETHEUS_CONFIG_PATH", value = "/etc/prometheus/prometheus.yml" }
-      ]
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = "/ecs/prometheus"
-          awslogs-region        = "us-west-1"
-          awslogs-stream-prefix = "ecs"
-        }
+  container_definitions = jsonencode([{
+    name      = "s3-sync"
+    image     = "amazon/aws-cli"
+    command = [
+      "s3", "sync", "s3://${aws_s3_bucket.prometheus_bucket.bucket}/prometheus.yml", "/etc/prometheus/prometheus.yml"
+    ]
+    logConfiguration = {
+      logDriver = "awslogs"
+      options = {
+        awslogs-group         = "/ecs/s3-sync"
+        awslogs-region        = "us-west-1"
+        awslogs-stream-prefix = "ecs"
       }
     }
-  ])
+    mountPoints = [{
+      sourceVolume  = "prometheus-config"
+      containerPath = "/etc/prometheus"
+    }]
+    essential = true
+  },
+  {
+    name      = "prometheus"
+    image     = "prom/prometheus:latest"
+    dependsOn = [{
+      containerName = "s3-sync"
+      condition     = "SUCCESS"
+    }]
+    cpu       = 256
+    memory    = 512
+    essential = true
+    portMappings = [{
+      containerPort = 9090
+    }]
+    mountPoints = [{
+      sourceVolume  = "prometheus-config"
+      containerPath = "/etc/prometheus"
+    }]
+  }])
+
+  volumes = [
+    {
+      name = "prometheus-config"
+      host = {
+        sourcePath = "/ecs/prometheus"
+      }
+    }
+  ]
 }
 
 
