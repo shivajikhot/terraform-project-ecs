@@ -190,7 +190,8 @@ resource "aws_ecs_task_definition" "prometheus" {
       }
       entryPoint = ["/bin/sh", "-c"]
       command = [
-        "aws s3 cp s3://$S3_BUCKET/prometheus.yml $PROMETHEUS_CONFIG_PATH && /prometheus --config.file=$PROMETHEUS_CONFIG_PATH"
+        "apk add --no-cache aws-cli && \
+         aws s3 cp s3://$S3_BUCKET/prometheus.yml $PROMETHEUS_CONFIG_PATH && /prometheus --config.file=$PROMETHEUS_CONFIG_PATH"
       ]
     }
   ])
