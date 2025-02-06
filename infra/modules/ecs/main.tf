@@ -89,7 +89,7 @@ resource "aws_ecs_task_definition" "task_definition" {
        },
        {
           name  = "AWS_XRAY_DAEMON_ADDRESS"
-          value = "xray.us-west-2.amazonaws.com:2000"
+          value = "xray.us-west-1.amazonaws.com:2000"
         },
        {
         name  = "AWS_XRAY_DAEMON_DISABLE_METADATA"
@@ -177,7 +177,7 @@ resource "aws_ecs_task_definition" "prometheus" {
       essential = true
       portMappings = [{ containerPort = 9090 }]
       environment = [
-        { name = "S3_BUCKET", value = aws_s3_bucket.prometheus_storage.bucket },
+        { name = "S3_BUCKET", value = aws_s3_bucket.prometheus_bucket.bucket },
         { name = "PROMETHEUS_CONFIG_PATH", value = "/etc/prometheus/prometheus.yml" }
       ]
       logConfiguration = {
@@ -188,9 +188,14 @@ resource "aws_ecs_task_definition" "prometheus" {
           awslogs-stream-prefix = "ecs"
         }
       }
+      entryPoint = ["/bin/sh", "-c"]
+      command = [
+        "aws s3 cp s3://${S3_BUCKET}/prometheus.yml ${PROMETHEUS_CONFIG_PATH} && /prometheus --config.file=${PROMETHEUS_CONFIG_PATH}"
+      ]
     }
   ])
 }
+
 
 resource "aws_ecs_task_definition" "grafana" {
   family                   = "${var.environment}-grafana"
