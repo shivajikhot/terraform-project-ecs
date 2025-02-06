@@ -188,6 +188,7 @@ resource "aws_ecs_task_definition" "prometheus" {
       sourceVolume  = "prometheus-config"
       containerPath = "/etc/prometheus"
     }]
+    essential = false
   },
   {
     name      = "prometheus"
@@ -201,6 +202,7 @@ resource "aws_ecs_task_definition" "prometheus" {
     portMappings = [{
       containerPort = 9090
     }]
+    essential = true
     mountPoints = [{
       sourceVolume  = "prometheus-config"
       containerPath = "/etc/prometheus"
