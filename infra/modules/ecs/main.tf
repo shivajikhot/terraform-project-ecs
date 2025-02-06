@@ -198,7 +198,6 @@ resource "aws_ecs_task_definition" "prometheus" {
     }]
     cpu       = 256
     memory    = 512
-    essential = true
     portMappings = [{
       containerPort = 9090
     }]
