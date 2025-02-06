@@ -169,6 +169,16 @@ resource "aws_ecs_task_definition" "prometheus" {
   memory                   = "1024"
 
   container_definitions = jsonencode([
+   {
+    name      = "aws-cli"
+    image     = "amazon/aws-cli"
+    cpu       = 128
+    memory    = 128
+    essential = true
+    command = [
+      "aws", "s3", "cp", "s3://$S3_BUCKET/prometheus.yml", "/etc/prometheus/prometheus.yml"
+    ]
+  },
     {
       name      = "prometheus"
       image     = "prom/prometheus:latest"
@@ -188,11 +198,6 @@ resource "aws_ecs_task_definition" "prometheus" {
           awslogs-stream-prefix = "ecs"
         }
       }
-      entryPoint = ["/bin/sh", "-c"]
-      command = [
-        "apk add --no-cache aws-cli && aws s3 cp s3://$S3_BUCKET/prometheus.yml $PROMETHEUS_CONFIG_PATH && /prometheus --config.file=$PROMETHEUS_CONFIG_PATH"
-         
-      ]
     }
   ])
 }
