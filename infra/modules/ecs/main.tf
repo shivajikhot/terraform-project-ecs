@@ -291,7 +291,7 @@ resource "aws_iam_policy" "prometheus_s3_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "prometheus_s3_attachment" {
-  role       = var.task_role_arn  # Attach to Prometheus task role
+  role       = basename(var.task_role_arn)  # Attach to Prometheus task role
   policy_arn = aws_iam_policy.prometheus_s3_policy.arn
 }
 
