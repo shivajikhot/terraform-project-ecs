@@ -169,16 +169,16 @@ resource "aws_ecs_task_definition" "prometheus" {
   memory                   = "1024"
 
   container_definitions = jsonencode([
-   {
-    name      = "aws-cli"
-    image     = "amazon/aws-cli"
-    cpu       = 128
-    memory    = 128
-    essential = true
-    command = [
-      "aws", "s3", "cp", "s3://${aws_s3_bucket.prometheus_bucket.bucket}/prometheus.yml", "/etc/prometheus/prometheus.yml"
-    ]
-  },
+ #  {
+ #   name      = "aws-cli"
+ #   image     = "amazon/aws-cli"
+ #   cpu       = 128
+ #   memory    = 128
+ #   essential = true
+ #   command = [
+ #     "aws", "s3", "cp", "s3://${aws_s3_bucket.prometheus_bucket.bucket}/prometheus.yml", "/etc/prometheus/prometheus.yml"
+ #   ]
+ # },
     {
       name      = "prometheus"
       image     = "prom/prometheus:latest"
