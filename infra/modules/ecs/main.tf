@@ -174,7 +174,7 @@ resource "aws_ecs_task_definition" "prometheus" {
     name      = "s3-sync"
     image     = "amazon/aws-cli"
     command = [
-      "s3", "sync", "s3://${aws_s3_bucket.prometheus_bucket.bucket}/prometheus.yml", "/etc/prometheus/prometheus.yml"
+       "s3", "cp", "s3://${aws_s3_bucket.prometheus_bucket.bucket}/prometheus.yml", "/etc/prometheus/prometheus.yml", "--debug"
     ]
     logConfiguration = {
       logDriver = "awslogs"
@@ -202,6 +202,14 @@ resource "aws_ecs_task_definition" "prometheus" {
     portMappings = [{
       containerPort = 9090
     }]
+    logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/prometheus"
+          awslogs-region        = "us-west-1"
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     essential = true
     mountPoints = [{
       sourceVolume  = "prometheus-config"
