@@ -14,9 +14,8 @@ module "ecs" {
   execution_role_arn      = module.iam.ecs_execution_role_arn
   task_role_arn           = module.iam.ecs_task_role_arn
   ecr_patient_repo_url    = module.ecr.patient_service_repo_url
-  ecr_appointment_repo_url = module.ecr.appointment_service_repo_url
   patient_tg_arn      = module.alb.patient_tg_arn
-  appointment_tg_arn  = module.alb.appointment_tg_arn
+
 }
 
 module "iam" {
@@ -28,7 +27,7 @@ module "iam" {
 
 module "ecr" {
   source      = "../../modules/ecr"
-  repository_name = "my-ecr-repo-${var.environment}"
+  repository_name = "${var.environment}"
   environment = var.environment
 }
 
