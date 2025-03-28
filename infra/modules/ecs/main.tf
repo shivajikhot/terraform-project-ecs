@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "web" {
 }
 
 resource "aws_ecs_service" "web_service" {
-  name            = "patient-service"
+  name            = "web-service"
   cluster         = aws_ecs_cluster.openproject.id
   task_definition = aws_ecs_task_definition.web.arn
   desired_count   = 1
