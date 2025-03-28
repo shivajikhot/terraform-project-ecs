@@ -51,8 +51,8 @@ resource "aws_ecs_task_definition" "worker" {
   family                   = "openproject-worker"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  memory                   = "512"
-  cpu                      = "256"
+  memory                  = "2GB"
+  cpu                     = "1 vCPU"
   execution_role_arn       = var.execution_role_arn
   task_role_arn         = var.task_role_arn
   container_definitions = jsonencode([
@@ -81,11 +81,11 @@ resource "aws_ecs_service" "worker" {
   }
 }
 resource "aws_ecs_task_definition" "cron" {
-  family                   = "openproject-cron"
+  family                   = "${var.ecr_patient_repo_url}:latest"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  memory                   = "512"
-  cpu                      = "256"
+  memory                  = "2GB"
+  cpu                     = "1 vCPU"
   execution_role_arn       = var.execution_role_arn
   task_role_arn         = var.task_role_arn
   
@@ -119,15 +119,15 @@ resource "aws_ecs_task_definition" "seeder" {
   family                   = "openproject-seeder"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  memory                   = "512"
-  cpu                      = "256"
+  memory                  = "2GB"
+  cpu                     = "1 vCPU"
   execution_role_arn       = var.execution_role_arn
   task_role_arn         = var.task_role_arn
   
   container_definitions = jsonencode([
     {
       name      = "seeder"
-      image     = "openproject/openproject:15-slim"
+      image     = "${var.ecr_patient_repo_url}:latest"
       command   = ["./docker/prod/seeder"]
       memory    = 512
       cpu       = 256
