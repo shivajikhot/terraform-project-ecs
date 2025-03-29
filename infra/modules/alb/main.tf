@@ -16,7 +16,7 @@ resource "aws_lb_target_group" "patient_tg" {
   port     = 8080
   protocol = "HTTP"
   vpc_id   = var.vpc_id
-  target_type = "IP"
+  target_type = "ip"
   health_check {
     path                = "/health_checks/default"
     interval            = 30
