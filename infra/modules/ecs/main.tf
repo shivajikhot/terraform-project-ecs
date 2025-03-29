@@ -126,7 +126,7 @@ resource "aws_ecs_service" "worker" {
   }
 }
 resource "aws_ecs_task_definition" "cron" {
-  family                   = "${var.ecr_openproject_repo_url}:latest"
+  family                   = "openproject-cron"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   memory                  = "2GB"
@@ -137,7 +137,7 @@ resource "aws_ecs_task_definition" "cron" {
   container_definitions = jsonencode([
     {
       name      = "cron"
-      image     = "openproject/openproject:15-slim"
+      image     = "${var.ecr_openproject_repo_url}:latest"
       command   = ["./docker/prod/cron"]
       memory    = 512
       cpu       = 256
