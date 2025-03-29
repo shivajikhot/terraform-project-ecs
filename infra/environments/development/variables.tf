@@ -35,4 +35,7 @@ variable "repository_name" {
   type        = string
 }
 
-
+variable "region" {
+  description = "was logsgroup region name"
+  type        = string
+}
