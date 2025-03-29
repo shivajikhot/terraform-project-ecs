@@ -17,6 +17,7 @@ variable "execution_role_arn" {}
 variable "task_role_arn" {}
 variable "ecr_openproject_repo_url" {}
 variable "region" {}
+variable "alb_dns_name" {}
 
 variable "patient_tg_arn" {
   description = "ARN of the patient service target group"
