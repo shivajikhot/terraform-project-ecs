@@ -5,7 +5,7 @@ resource "aws_ecs_cluster" "openproject" {
     value = "enabled"
   }
 }
-resource "aws_cloudwatch_log_group" "ecs_patient_logs" {
+resource "aws_cloudwatch_log_group" "ecs_log_group" {
   name              = "/ecs/openproject"
   retention_in_days = 30
 }
