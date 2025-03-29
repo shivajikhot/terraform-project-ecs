@@ -1,5 +1,5 @@
 
-variable "public_subnet_ids" {
+variable "privet_subnet_ids" {
   description = "The public subnet ID"
   type = list(string)
 }
@@ -15,8 +15,8 @@ variable "environment" {
 }
 variable "execution_role_arn" {}
 variable "task_role_arn" {}
-variable "ecr_patient_repo_url" {}
-
+variable "ecr_openproject_repo_url" {}
+variable "region" {}
 
 variable "patient_tg_arn" {
   description = "ARN of the patient service target group"
