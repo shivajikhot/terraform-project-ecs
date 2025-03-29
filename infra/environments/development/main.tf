@@ -8,13 +8,14 @@ module "vpc" {
 }
 module "ecs" {
   source                  = "../../modules/ecs"
-  public_subnet_ids       = module.vpc.public_subnet_ids
+  privet_subnet_ids       = module.vpc.privet_subnet_ids
   ecs_security_group_id   = module.iam.ecs_security_group_id
   environment             = var.environment
   execution_role_arn      = module.iam.ecs_execution_role_arn
   task_role_arn           = module.iam.ecs_task_role_arn
-  ecr_patient_repo_url    = module.ecr.patient_service_repo_url
-  patient_tg_arn      = module.alb.patient_tg_arn
+  ecr_openproject_repo_url = module.ecr_openproject_repo_url
+  patient_tg_arn          = module.alb.patient_tg_arn
+  region                  = var.region
 
 }
 
