@@ -38,18 +38,12 @@ resource "aws_security_group" "alb_security_group" {
   description = "Security group for ALB"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]  # Allow HTTPS traffic from anywhere
   }
 
-  ingress {
-    from_port   = 3001
-    to_port     = 3001
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] 
-  }
   ingress {
     from_port   = 443
     to_port     = 443
@@ -76,17 +70,24 @@ resource "aws_security_group" "ecs_security_group" {
   description = "Security group for ECS tasks"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]  # Allow HTTPS traffic from anywhere
   }
 
   ingress {
-    from_port   = 3001
-    to_port     = 3001
+    from_port   = 5432
+    to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] 
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+ 
+  ingress {
+    from_port   = 11211
+    to_port     = 11211
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
     from_port   = 443
