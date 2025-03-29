@@ -1,4 +1,4 @@
-resource "aws_lb" "application_load_balancer" {
+resource "aws_lb" "openproject_load_balancer" {
   name               = "${var.environment}-alb"
   internal           = false
   load_balancer_type = "application"
@@ -11,7 +11,7 @@ resource "aws_lb" "application_load_balancer" {
   }
 }
 
-resource "aws_lb_target_group" "patient_tg" {
+resource "aws_lb_target_group" "openproject_web" {
   name     = "openprject-tg"
   port     = 8080
   protocol = "HTTP"
@@ -31,7 +31,7 @@ resource "aws_lb_target_group" "patient_tg" {
 
 # Single ALB Listener on port 80
 resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.application_load_balancer.arn
+  load_balancer_arn = aws_lb.openproject_load_balancer.arn
   port              = 80
   protocol          = "HTTP"
 
