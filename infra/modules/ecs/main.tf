@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "web" {
       }]
       environment = [
         { name = "OPENPROJECT_HTTPS", value = "false" },
-        { name = "OPENPROJECT_HOST__NAME", value = "aws_lb.openproject_alb.dns_name" },
+        { name = "OPENPROJECT_HOST__NAME", value = "${var.alb_dns_name}" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
         { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
@@ -91,7 +91,7 @@ resource "aws_ecs_task_definition" "worker" {
       essential = true
       environment = [
         { name = "OPENPROJECT_HTTPS", value = "false" },
-        { name = "OPENPROJECT_HOST__NAME", value = "aws_lb.openproject_alb.dns_name" },
+        { name = "OPENPROJECT_HOST__NAME", value = "${var.alb_dns_name}" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
         { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
@@ -144,7 +144,7 @@ resource "aws_ecs_task_definition" "cron" {
       essential = true
       environment = [
         { name = "OPENPROJECT_HTTPS", value = "false" },
-        { name = "OPENPROJECT_HOST__NAME", value = "aws_lb.openproject_alb.dns_name" },
+        { name = "OPENPROJECT_HOST__NAME", value = "${var.alb_dns_name}" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
         { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
@@ -198,7 +198,7 @@ resource "aws_ecs_task_definition" "seeder" {
       essential = true
       environment = [
         { name = "OPENPROJECT_HTTPS", value = "false" },
-        { name = "OPENPROJECT_HOST__NAME", value = "aws_lb.openproject_alb.dns_name" },
+        { name = "OPENPROJECT_HOST__NAME", value = "${var.alb_dns_name}" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
         { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
