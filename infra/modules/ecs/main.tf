@@ -5,9 +5,9 @@ resource "aws_ecs_cluster" "openproject" {
     value = "enabled"
   }
 }
-resource "aws_cloudwatch_log_group" "ecs_log_group" {
-  name              = "/ecs/openproject"
-  retention_in_days = 30 # Retain logs for 30 days
+resource "aws_cloudwatch_log_group" "ecs_patient_logs" {
+  name              = "/ecs/openproject"
+  retention_in_days = 30
 }
 resource "aws_ecs_task_definition" "web" {
   family                = "openproject-web"
