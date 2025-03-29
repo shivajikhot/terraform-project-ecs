@@ -12,12 +12,19 @@ resource "aws_lb" "application_load_balancer" {
 }
 
 resource "aws_lb_target_group" "patient_tg" {
-  name     = "patient-tg"
+  name     = "openprject-tg"
   port     = 8080
   protocol = "HTTP"
   vpc_id   = var.vpc_id
-  target_type = "ip"
-
+  target_type = "IP"
+  health_check {
+    path                = "/health_checks/default"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    matcher             = "200"
+  }
 }
 
 
