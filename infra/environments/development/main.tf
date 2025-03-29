@@ -8,7 +8,7 @@ module "vpc" {
 }
 module "ecs" {
   source                  = "../../modules/ecs"
-  private_subnet_ids       = module.vpc.privete_subnet_ids
+  private_subnet_ids       = module.vpc.private_subnet_ids
   ecs_security_group_id   = module.iam.ecs_security_group_id
   environment             = var.environment
   execution_role_arn      = module.iam.ecs_execution_role_arn
