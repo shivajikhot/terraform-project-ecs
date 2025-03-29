@@ -13,7 +13,7 @@ module "ecs" {
   environment             = var.environment
   execution_role_arn      = module.iam.ecs_execution_role_arn
   task_role_arn           = module.iam.ecs_task_role_arn
-  ecr_openproject_repo_url = module.ecr_openproject_repo_url
+  ecr_openproject_repo_url = module.ecr.ecr_openproject_repo_url
   patient_tg_arn          = module.alb.patient_tg_arn
   region                  = var.region
   alb_dns_name            = module.alb.alb_dns_name
