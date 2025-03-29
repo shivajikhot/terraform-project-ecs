@@ -1,7 +1,14 @@
 resource "aws_ecs_cluster" "openproject" {
   name = "openproject-ecs-cluster"
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
-
+resource "aws_cloudwatch_log_group" "ecs_log_group" {
+  name              = "/ecs/openproject"
+  retention_in_days = 30 # Retain logs for 30 days
+}
 resource "aws_ecs_task_definition" "web" {
   family                = "openproject-web"
   execution_role_arn    = var.execution_role_arn
@@ -10,7 +17,7 @@ resource "aws_ecs_task_definition" "web" {
   container_definitions = jsonencode([
     {
       name      = "web"
-      image     = "${var.ecr_patient_repo_url}:latest"  
+      image     = "${var.ecr_openproject_repo_url}:latest"  
       cpu       = 512
       memory    = 1024
       essential = true
@@ -20,7 +27,7 @@ resource "aws_ecs_task_definition" "web" {
       }]
       environment = [
         { name = "OPENPROJECT_HTTPS", value = "false" },
-        { name = "OPENPROJECT_HOST__NAME", value = aws_lb.openproject_alb.dns_name },
+        { name = "OPENPROJECT_HOST__NAME", value = "aws_lb.openproject_alb.dns_name" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
         { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
@@ -53,7 +60,7 @@ resource "aws_ecs_service" "web_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = var.public_subnet_ids
+    subnets          = var.privet_subnet_ids
     security_groups  = [var.ecs_security_group_id]
     assign_public_ip = true
   }
@@ -77,14 +84,14 @@ resource "aws_ecs_task_definition" "worker" {
   container_definitions = jsonencode([
     {
       name      = "worker"
-      image     = "${var.ecr_patient_repo_url}:latest"
+      image     = "${var.ecr_openproject_repo_url}:latest"
       command   = ["./docker/prod/worker"]
       memory    = 512
       cpu       = 256
       essential = true
       environment = [
         { name = "OPENPROJECT_HTTPS", value = "false" },
-        { name = "OPENPROJECT_HOST__NAME", value = aws_lb.openproject_alb.dns_name },
+        { name = "OPENPROJECT_HOST__NAME", value = "aws_lb.openproject_alb.dns_name" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
         { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
@@ -113,13 +120,13 @@ resource "aws_ecs_service" "worker" {
   desired_count   = 1
 
   network_configuration {
-    subnets          = var.public_subnet_ids
+    subnets          = var.privet_subnet_ids
     security_groups  = [var.ecs_security_group_id]
     assign_public_ip = true
   }
 }
 resource "aws_ecs_task_definition" "cron" {
-  family                   = "${var.ecr_patient_repo_url}:latest"
+  family                   = "${var.ecr_openproject_repo_url}:latest"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   memory                  = "2GB"
@@ -137,7 +144,7 @@ resource "aws_ecs_task_definition" "cron" {
       essential = true
       environment = [
         { name = "OPENPROJECT_HTTPS", value = "false" },
-        { name = "OPENPROJECT_HOST__NAME", value = aws_lb.openproject_alb.dns_name },
+        { name = "OPENPROJECT_HOST__NAME", value = "aws_lb.openproject_alb.dns_name" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
         { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
@@ -151,7 +158,7 @@ resource "aws_ecs_task_definition" "cron" {
         options = {
           awslogs-group         = aws_cloudwatch_log_group.ecs_log_group.name
           awslogs-region        = var.region
-          awslogs-stream-prefix = "web"
+          awslogs-stream-prefix = "cron"
         }
     }
     }
@@ -166,7 +173,7 @@ resource "aws_ecs_service" "cron" {
   desired_count   = 1
 
   network_configuration {
-    subnets          = var.public_subnet_ids
+    subnets          = var.privet_subnet_ids
     security_groups  = [var.ecs_security_group_id]
     assign_public_ip = true
   }
@@ -184,14 +191,14 @@ resource "aws_ecs_task_definition" "seeder" {
   container_definitions = jsonencode([
     {
       name      = "seeder"
-      image     = "${var.ecr_patient_repo_url}:latest"
+      image     = "${var.ecr_openproject_repo_url}:latest"
       command   = ["./docker/prod/seeder"]
       memory    = 512
       cpu       = 256
       essential = true
       environment = [
         { name = "OPENPROJECT_HTTPS", value = "false" },
-        { name = "OPENPROJECT_HOST__NAME", value = aws_lb.openproject_alb.dns_name },
+        { name = "OPENPROJECT_HOST__NAME", value = "aws_lb.openproject_alb.dns_name" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
         { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
@@ -205,7 +212,7 @@ resource "aws_ecs_task_definition" "seeder" {
         options = {
           awslogs-group         = aws_cloudwatch_log_group.ecs_log_group.name
           awslogs-region        = var.region
-          awslogs-stream-prefix = "web"
+          awslogs-stream-prefix = "seeder"
         }
     }
     }
@@ -220,7 +227,7 @@ resource "aws_ecs_service" "seeder" {
   desired_count   = 1
 
   network_configuration {
-    subnets          = var.public_subnet_ids
+    subnets          = var.privet_subnet_ids
     security_groups  = [var.ecs_security_group_id]
     assign_public_ip = true
   }
