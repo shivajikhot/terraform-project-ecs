@@ -16,7 +16,7 @@ module "ecs" {
   ecr_openproject_repo_url = module.ecr_openproject_repo_url
   patient_tg_arn          = module.alb.patient_tg_arn
   region                  = var.region
-
+  alb_dns_name            = module.alb.alb_dns_name
 }
 
 module "iam" {
