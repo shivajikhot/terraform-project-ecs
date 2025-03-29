@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "web" {
   container_definitions = jsonencode([
     {
       name      = "web"
-      image     = "${var.ecr_patient_repo_url}:latest"  # Dynamically use the ECR URL
+      image     = "${var.ecr_patient_repo_url}:latest"  
       cpu       = 512
       memory    = 1024
       essential = true
@@ -18,7 +18,26 @@ resource "aws_ecs_task_definition" "web" {
         containerPort = 8080
         hostPort      = 8080
       }]
+      environment = [
+        { name = "OPENPROJECT_HTTPS", value = "false" },
+        { name = "OPENPROJECT_HOST__NAME", value = aws_lb.openproject_alb.dns_name },
+        { name = "OPENPROJECT_HSTS", value = "true" },
+        { name = "RAILS_CACHE_STORE", value = "memcache" },
+        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
+        { name = "DATABASE_URL", value = "postgres://postgres:Pr*de03kum1@devopsdatabase-instance-1.c61q0mwu08s7.us-east-1.rds.amazonaws.com:5432/postgres?pool=20&encoding=unicode&reconnect=true"},
+        { name = "RAILS_MIN_THREADS", value = "4" },
+        { name = "RAILS_MAX_THREADS", value = "16" },
+        { name = "IMAP_ENABLED", value = "false" }
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.ecs_log_group.name
+          awslogs-region        = var.region
+          awslogs-stream-prefix = "web"
+        }
     }
+   }
   ])
 
   requires_compatibilities = ["FARGATE"]
@@ -63,6 +82,25 @@ resource "aws_ecs_task_definition" "worker" {
       memory    = 512
       cpu       = 256
       essential = true
+      environment = [
+        { name = "OPENPROJECT_HTTPS", value = "false" },
+        { name = "OPENPROJECT_HOST__NAME", value = aws_lb.openproject_alb.dns_name },
+        { name = "OPENPROJECT_HSTS", value = "true" },
+        { name = "RAILS_CACHE_STORE", value = "memcache" },
+        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
+        { name = "DATABASE_URL", value = "postgres://postgres:Pr*de03kum1@devopsdatabase-instance-1.c61q0mwu08s7.us-east-1.rds.amazonaws.com:5432/postgres?pool=20&encoding=unicode&reconnect=true"},
+        { name = "RAILS_MIN_THREADS", value = "4" },
+        { name = "RAILS_MAX_THREADS", value = "16" },
+        { name = "IMAP_ENABLED", value = "false" }
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.ecs_log_group.name
+          awslogs-region        = var.region
+          awslogs-stream-prefix = "worker"
+        }
+    }
     }
   ])
 }
@@ -97,6 +135,25 @@ resource "aws_ecs_task_definition" "cron" {
       memory    = 512
       cpu       = 256
       essential = true
+      environment = [
+        { name = "OPENPROJECT_HTTPS", value = "false" },
+        { name = "OPENPROJECT_HOST__NAME", value = aws_lb.openproject_alb.dns_name },
+        { name = "OPENPROJECT_HSTS", value = "true" },
+        { name = "RAILS_CACHE_STORE", value = "memcache" },
+        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
+        { name = "DATABASE_URL", value = "postgres://postgres:Pr*de03kum1@devopsdatabase-instance-1.c61q0mwu08s7.us-east-1.rds.amazonaws.com:5432/postgres?pool=20&encoding=unicode&reconnect=true"},
+        { name = "RAILS_MIN_THREADS", value = "4" },
+        { name = "RAILS_MAX_THREADS", value = "16" },
+        { name = "IMAP_ENABLED", value = "false" }
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.ecs_log_group.name
+          awslogs-region        = var.region
+          awslogs-stream-prefix = "web"
+        }
+    }
     }
   ])
 }
@@ -132,6 +189,25 @@ resource "aws_ecs_task_definition" "seeder" {
       memory    = 512
       cpu       = 256
       essential = true
+      environment = [
+        { name = "OPENPROJECT_HTTPS", value = "false" },
+        { name = "OPENPROJECT_HOST__NAME", value = aws_lb.openproject_alb.dns_name },
+        { name = "OPENPROJECT_HSTS", value = "true" },
+        { name = "RAILS_CACHE_STORE", value = "memcache" },
+        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
+        { name = "DATABASE_URL", value = "postgres://postgres:Pr*de03kum1@devopsdatabase-instance-1.c61q0mwu08s7.us-east-1.rds.amazonaws.com:5432/postgres?pool=20&encoding=unicode&reconnect=true"},
+        { name = "RAILS_MIN_THREADS", value = "4" },
+        { name = "RAILS_MAX_THREADS", value = "16" },
+        { name = "IMAP_ENABLED", value = "false" }
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.ecs_log_group.name
+          awslogs-region        = var.region
+          awslogs-stream-prefix = "web"
+        }
+    }
     }
   ])
 }
