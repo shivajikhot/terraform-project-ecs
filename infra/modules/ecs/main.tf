@@ -60,7 +60,7 @@ resource "aws_ecs_service" "web_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = var.privet_subnet_ids
+    subnets          = var.private_subnet_ids
     security_groups  = [var.ecs_security_group_id]
     assign_public_ip = true
   }
@@ -120,7 +120,7 @@ resource "aws_ecs_service" "worker" {
   desired_count   = 1
 
   network_configuration {
-    subnets          = var.privet_subnet_ids
+    subnets          = var.private_subnet_ids
     security_groups  = [var.ecs_security_group_id]
     assign_public_ip = true
   }
@@ -173,7 +173,7 @@ resource "aws_ecs_service" "cron" {
   desired_count   = 1
 
   network_configuration {
-    subnets          = var.privet_subnet_ids
+    subnets          = var.private_subnet_ids
     security_groups  = [var.ecs_security_group_id]
     assign_public_ip = true
   }
@@ -227,7 +227,7 @@ resource "aws_ecs_service" "seeder" {
   desired_count   = 1
 
   network_configuration {
-    subnets          = var.privet_subnet_ids
+    subnets          = var.private_subnet_ids
     security_groups  = [var.ecs_security_group_id]
     assign_public_ip = true
   }
