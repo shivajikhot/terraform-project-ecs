@@ -24,3 +24,23 @@ variable "patient_tg_arn" {
   type        = string
 }
 
+variable "cluster_endpoint" {
+  description = "Aurora PostgreSQL cluster endpoint"
+  type        = string
+}
+
+variable "cluster_master_username" {
+  description = "Aurora PostgreSQL master username"
+  type        = string
+}
+
+variable "cluster_master_password" {
+  description = "Aurora PostgreSQL master password"
+  type        = string
+  sensitive   = true
+}
+
+variable "memcached_endpoint" {
+  description = "ElastiCache Memcached primary endpoint"
+  type        = string
+}
