@@ -114,4 +114,7 @@ variable "parameter_group_name" {
   default     = "default.memcached1.6"
 }
 
-
+variable "subnet_group_name" {
+  description = "Name of the DB subnet group"
+  type        = string
+}
