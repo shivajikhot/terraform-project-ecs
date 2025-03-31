@@ -16,3 +16,8 @@ backup_retention_period = 7
 preferred_backup_window = "03:00-04:00"
 db_subnet_group_name   = "openproject-db-subnet-group"
 instance_class         = "db.t3.medium"
+#################################################
+cluster_id           = "openproject-cache"
+node_type           = "cache.t3.micro"
+num_cache_nodes     = 1
+parameter_group_name = "default.memcached1.6"
