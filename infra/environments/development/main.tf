@@ -60,6 +60,7 @@ module "elasticache" {
   cluster_id           = var.cluster_id
   node_type            = var.node_type
   num_cache_nodes      = var.num_cache_nodes
-  subnet_group_name    = module.rds.db_subnet_group_name
+  subnet_group_name    = var.subnet_group_name
   security_group_id    = module.iam.ecs_security_group_id
+  elasticache_subnet_ids = module.vpc.private_subnet_ids
 }
