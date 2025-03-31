@@ -32,5 +32,5 @@ variable "security_group_id" {
 }
 variable "elasticache_subnet_ids" {
   description = "Security group ID for Aurora cluster"
-  type        = string
+  type        = list(string)
 }
