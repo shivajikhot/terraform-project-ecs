@@ -17,6 +17,10 @@ module "ecs" {
   patient_tg_arn          = module.alb.patient_tg_arn
   region                  = var.region
   alb_dns_name            = module.alb.alb_dns_name
+  cluster_endpoint       = module.rds.aurora_cluster_endpoint
+  cluster_master_username = module.rds.cluster_master_username
+  cluster_master_password = module.rds.cluster_master_password
+  memcached_endpoint     = module.elasticache.elasticache_endpoint
 }
 
 module "iam" {
