@@ -30,8 +30,8 @@ resource "aws_ecs_task_definition" "web" {
         { name = "OPENPROJECT_HOST__NAME", value = "${var.alb_dns_name}" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
-        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
-        { name = "DATABASE_URL", value = "postgres://postgres:Pr*de03kum1@devopsdatabase-instance-1.c61q0mwu08s7.us-east-1.rds.amazonaws.com:5432/postgres?pool=20&encoding=unicode&reconnect=true"},
+        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "${var.memcached_endpoint}:11211" },
+        { name = "DATABASE_URL", value = "postgres://${var.cluster_master_username}:${var.cluster_master_password}@${var.cluster_endpoint}/openproject?pool=20&encoding=unicode&reconnect=true",
         { name = "RAILS_MIN_THREADS", value = "4" },
         { name = "RAILS_MAX_THREADS", value = "16" },
         { name = "IMAP_ENABLED", value = "false" }
@@ -94,8 +94,8 @@ resource "aws_ecs_task_definition" "worker" {
         { name = "OPENPROJECT_HOST__NAME", value = "${var.alb_dns_name}" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
-        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
-        { name = "DATABASE_URL", value = "postgres://postgres:Pr*de03kum1@devopsdatabase-instance-1.c61q0mwu08s7.us-east-1.rds.amazonaws.com:5432/postgres?pool=20&encoding=unicode&reconnect=true"},
+        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "${var.memcached_endpoint}:11211" },
+        { name = "DATABASE_URL", value = "postgres://${var.cluster_master_username}:${var.cluster_master_password}@${var.cluster_endpoint}/openproject?pool=20&encoding=unicode&reconnect=true"},
         { name = "RAILS_MIN_THREADS", value = "4" },
         { name = "RAILS_MAX_THREADS", value = "16" },
         { name = "IMAP_ENABLED", value = "false" }
@@ -147,8 +147,8 @@ resource "aws_ecs_task_definition" "cron" {
         { name = "OPENPROJECT_HOST__NAME", value = "${var.alb_dns_name}" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
-        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
-        { name = "DATABASE_URL", value = "postgres://postgres:Pr*de03kum1@devopsdatabase-instance-1.c61q0mwu08s7.us-east-1.rds.amazonaws.com:5432/postgres?pool=20&encoding=unicode&reconnect=true"},
+        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", "${var.memcached_endpoint}:11211" },
+        { name = "DATABASE_URL", value = "postgres://${var.cluster_master_username}:${var.cluster_master_password}@${var.cluster_endpoint}/openproject?pool=20&encoding=unicode&reconnect=true"},
         { name = "RAILS_MIN_THREADS", value = "4" },
         { name = "RAILS_MAX_THREADS", value = "16" },
         { name = "IMAP_ENABLED", value = "false" }
@@ -201,8 +201,8 @@ resource "aws_ecs_task_definition" "seeder" {
         { name = "OPENPROJECT_HOST__NAME", value = "${var.alb_dns_name}" },
         { name = "OPENPROJECT_HSTS", value = "true" },
         { name = "RAILS_CACHE_STORE", value = "memcache" },
-        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "cache:11211" },
-        { name = "DATABASE_URL", value = "postgres://postgres:Pr*de03kum1@devopsdatabase-instance-1.c61q0mwu08s7.us-east-1.rds.amazonaws.com:5432/postgres?pool=20&encoding=unicode&reconnect=true"},
+        { name = "OPENPROJECT_CACHE__MEMCACHE__SERVER", value = "${var.memcached_endpoint}:11211" },
+        { name = "DATABASE_URL", value = "postgres://${var.cluster_master_username}:${var.cluster_master_password}@${var.cluster_endpoint}/openproject?pool=20&encoding=unicode&reconnect=true"},
         { name = "RAILS_MIN_THREADS", value = "4" },
         { name = "RAILS_MAX_THREADS", value = "16" },
         { name = "IMAP_ENABLED", value = "false" }
