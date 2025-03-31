@@ -49,7 +49,7 @@ module "rds" {
   master_password        = var.master_password
   backup_retention_period = var.backup_retention_period
   preferred_backup_window = var.preferred_backup_window
-  db_security_group_id   = module.vpc.db_sg_id
+  db_security_group_id   = module.iam.ecs_security_group_id
   db_subnet_group_name   = var.db_subnet_group_name
   db_subnet_ids          = module.vpc.private_subnet_ids
   instance_class         = var.instance_class
