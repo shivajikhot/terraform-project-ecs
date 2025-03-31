@@ -55,3 +55,11 @@ module "rds" {
   instance_class         = var.instance_class
 }
 
+module "elasticache" {
+  source               = "../../modules/elasticache"
+  cluster_id           = var.cluster_id
+  node_type            = var.node_type
+  num_cache_nodes      = var.num_cache_nodes
+  subnet_group_name    = var.db_subnet_group_name
+  security_group_id    = module.iam.ecs_security_group_id
+}
