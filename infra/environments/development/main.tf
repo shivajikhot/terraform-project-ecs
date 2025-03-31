@@ -39,3 +39,19 @@ module "alb" {
   vpc_id                = module.vpc.vpc_id
   environment           = var.environment
 }
+
+module "rds" {
+  source                 = "../../modules/rds"
+  cluster_identifier     = var.cluster_identifier
+  engine_version         = var.engine_version
+  database_name          = var.database_name
+  master_username        = var.master_username
+  master_password        = var.master_password
+  backup_retention_period = var.backup_retention_period
+  preferred_backup_window = var.preferred_backup_window
+  db_security_group_id   = module.vpc.db_sg_id
+  db_subnet_group_name   = var.db_subnet_group_name
+  db_subnet_ids          = module.vpc.private_subnet_ids
+  instance_class         = var.instance_class
+}
+
